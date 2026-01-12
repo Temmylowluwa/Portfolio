@@ -6,6 +6,7 @@ In enterprise environments, networks are often segmented to enforce **separation
 In this project, I replicated a similar setup on **AWS** by implementing a **Bastion Host architecture**.
 
 The Bastion Host serves as a secure entry point into a private network, controlling access to instances that are not directly exposed to the internet.
+![alt text](./images/temmy_1.png)
 
 ---
 
@@ -36,7 +37,7 @@ This architecture ensures that only the Bastion can reach the private instance â
 ### Step 1: Create a VPC
 
 Created a custom VPC with CIDR block `10.0.0.0/16`.
-![alt text](./Images/bastion-host/image1.png)
+![alt text](./images/image2.png)
 
 ---
 
