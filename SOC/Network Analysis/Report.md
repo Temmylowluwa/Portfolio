@@ -45,7 +45,7 @@ The analysis followed a structured methodology to ensure accurate identification
 # 5. Findings and Analysis
 
 The analysis identified multiple security incidents, spanning two distinct captures and highlighting a significant internal security compromise. The use of multiple internal IP addresses as sources strongly suggests either a widespread, multi-host compromise or coordinated insider activity.
-
+![alt text](./images/image1.png)
 | Capture No. | Threat Type | Attacker IP | Target IP | Packet Range | Description | Severity |
 | :---- | :---- | :---- | :---- | :---- | :---- | :---- |
 | **Capture 1** | Brute Force Attack | 192.168.56.1 | 192.168.56.102 | 135 \- 81189 | Numerous repeated attempts to log into the FTP service on Port 21, resulting in clear-text credential exposure. | **High** |
