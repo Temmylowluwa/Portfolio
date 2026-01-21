@@ -112,17 +112,17 @@ ifconfig
 I installed snort using the Ubuntu package manager:
 
 sudo apt install snort \-y  
-![][image1]
+![alttext](./images/fig1.png)
 
 During installation, the system asked for the local network range. This information helps Snort understand which network it is protecting.
 
-![][image2]
+![alttext](./images/fig2.png)
 
 After installation, I check for the version of Snort I installed:
 
 snort \- \-version
 
-![][image3]
+![alttext](./images/fig3.png)
 
 ## **5\. Configuring Snort**
 
