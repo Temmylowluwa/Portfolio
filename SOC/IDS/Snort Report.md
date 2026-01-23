@@ -131,7 +131,7 @@ snort \- \-version
 The main Snort configuration file is located at:
 
 /etc/snort/snort.conf  
-![][image4]
+![alttext](./images/fig4.png)
 
 The protected network was defined using the following settings:
 
@@ -142,7 +142,7 @@ Snort was also configured to load custom rules from the local rules file:
 
 include $RULE\_PATH/local.rules
 
-![][image5]
+![alttext](./images/fig5.png)
 
 ### **5.2 Monitoring Interface Setup**
 
@@ -164,7 +164,7 @@ This rule detects when a system sends ping requests:
 
 alert icmp any any \-\> any any (itype:8; msg:”ICMP Ping Detected”; sid: 1000001; rev:1;). 
 
-![][image6]
+![alttext](./images/fig6.png)
 
 ### **6.2 Nmap Scan Detection Rules**
 
@@ -172,7 +172,7 @@ Nmap scans use special TCP flag combinations. Snort rules were written to detect
 
 alert tcp any any \-\> any any (flags:s; msg:”Nmap SYN Scan Detected”; flags:S; sid: 1000002; rev:1;)
 
-![][image7]
+![alttext](./images/fig7.png)
 
 ### **6.3 hping3 Scan Detection Rules**
 
