@@ -232,7 +232,7 @@ Sample alert output:
 
 \[Priority: 0\] {ICMP} Attacker → Target
 
-![][image11]
+![alttext](./Snort%20Images/fig8.png)
 
 #### **Analysis**
 
