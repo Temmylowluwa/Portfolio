@@ -193,7 +193,7 @@ This rule detects when a system sends ping requests:
 
 alert icmp any any \-\> any any (itype:8; msg:”ICMP Ping Detected”; sid: 1000001; rev:1;). 
 
-![Alt text](./Images/Snort%20Images/Ubuntu%20space-2025-11-28-19-11-19.png)
+![ICMP RULES Screenshot](./Images/Snort%20Images/Ubuntu%20space-2025-11-28-19-11-19.png)
 
 ### **6.2 Nmap Scan Detection Rules**
 
