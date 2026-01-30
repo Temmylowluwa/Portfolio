@@ -1,14 +1,5 @@
 # **Deployment and Evaluation of Suricata Intrusion Detection System**
 
-**Project Title:** Network Security Analysis and Incident Response Evaluation
-
-**Analyst Name:** Paseda Temiloluwa  
-**Date of Submission:** January 24, 2026
-
-**Confidentiality Notice:** This document is classified as Internal/Confidential and is intended solely for the management and technical teams of the client organization. Unauthorized distribution is prohibited.
-
----
-
 ## Table of Contents
 
 1. Executive Summary
