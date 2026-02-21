@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NGINX behind Traefik</title>
+    <style>
+      :root {
+        --bg1: #0b1020;
+        --bg2: #111a33;
+        --card: rgba(255, 255, 255, 0.08);
+        --card2: rgba(255, 255, 255, 0.06);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.68);
+        --border: rgba(255, 255, 255, 0.14);
+        --ok: #22c55e;
+        --warn: #f59e0b;
+        --accent: #7c3aed;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color: var(--text);
+        background:
+          radial-gradient(900px 450px at 10% 10%, rgba(124, 58, 237, 0.35), transparent 60%),
+          radial-gradient(900px 450px at 90% 20%, rgba(34, 197, 94, 0.25), transparent 60%),
+          linear-gradient(180deg, var(--bg1), var(--bg2));
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .wrap { width: min(980px, 100%); }
+
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        letter-spacing: 0.2px;
+      }
+
+      .logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(124,58,237,1), rgba(34,197,94,1));
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+      }
+
+      .brand h1 {
+        font-size: 16px;
+        margin: 0;
+        font-weight: 650;
+      }
+
+      .pill {
+        font-size: 12px;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        padding: 8px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, var(--card), var(--card2));
+        border-radius: 18px;
+        padding: 22px;
+        box-shadow: 0 18px 60px rgba(0,0,0,0.38);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+      }
+
+      @media (max-width: 860px) {
+        .hero { grid-template-columns: 1fr; }
+        .top { flex-direction: column; align-items: flex-start; }
+      }
+
+      .title {
+        font-size: clamp(28px, 3.4vw, 42px);
+        line-height: 1.12;
+        margin: 0 0 10px 0;
+        font-weight: 780;
+      }
+
+      .subtitle {
+        margin: 0 0 16px 0;
+        color: var(--muted);
+        font-size: 14.5px;
+        line-height: 1.55;
+      }
+
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .badge {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .kpi {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        padding: 14px;
+        border-radius: 16px;
+      }
+
+      .kpi .label { font-size: 12px; color: var(--muted); }
+      .kpi .value { font-size: 18px; margin-top: 6px; font-weight: 700; }
+      .dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+      .ok { background: var(--ok); }
+      .warn { background: var(--warn); }
+
+      .btnrow {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.04);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+      }
+
+      .btn.primary {
+        background: rgba(124,58,237,0.22);
+        border-color: rgba(124,58,237,0.45);
+      }
+
+      .btn:hover { transform: translateY(-1px); transition: 140ms ease; }
+
+      footer {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      code {
+        padding: 2px 6px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: rgba(0,0,0,0.25);
+        color: rgba(255,255,255,0.9);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <div class="top">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>Traefik + NGINX</h1>
+            <div class="pill">HTTPS termination • auto discovery • isolated service</div>
+          </div>
+        </div>
+        <div class="pill">URL: <code>https://localhost</code></div>
+      </div>
+
+      <div class="card">
+        <div class="hero">
+          <div>
+            <h2 class="title">Reverse proxy routing is live.</h2>
+            <p class="subtitle">
+              This page is served by <strong>NGINX</strong> (static site) and securely routed through
+              <strong>Traefik</strong> over <strong>HTTPS</strong>. NGINX is not exposed to the host,
+              only Traefik is.
+            </p>
+
+            <div class="badges">
+              <div class="badge"><span class="dot ok"></span>HTTPS enabled</div>
+              <div class="badge"><span class="dot ok"></span>Auto service discovery</div>
+              <div class="badge"><span class="dot ok"></span>Internal network isolation</div>
+              <div class="badge"><span class="dot warn"></span>Self signed certificate</div>
+            </div>
+
+            <div class="btnrow">
+              <a class="btn primary" href="/" rel="nofollow">Refresh</a>
+              <a class="btn" href="https://localhost" rel="nofollow">Open secure URL</a>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="kpi">
+              <div class="label">Reverse Proxy</div>
+              <div class="value">Traefik</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Backend Service</div>
+              <div class="value">NGINX</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Routing</div>
+              <div class="value">Host rules + labels</div>
+            </div>
+            <div class="kpi">
+              <div class="label">TLS</div>
+              <div class="value">Terminated at Traefik</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        Tip: change the text in <code>site/index.html</code> and refresh — no rebuild needed.
+      </footer>
+    </div>
+  </body>
+</html>

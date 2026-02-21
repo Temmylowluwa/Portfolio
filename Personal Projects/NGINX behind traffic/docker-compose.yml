@@ -1,0 +1,51 @@
+services:
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+      - ./certs:/certs:ro
+    networks:
+      - proxy
+      - internal
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    networks:
+      - internal
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.nginx.rule: "Host(`localhost`) || Host(`example.local`)"
+      traefik.http.routers.nginx.entrypoints: websecure
+      traefik.http.routers.nginx.tls: "true"
+      traefik.http.services.nginx.loadbalancer.server.port: "80"
+      traefik.docker.network: proxy
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+
+networks:
+  proxy:
+    name: proxy
+    driver: bridge
+  internal:
+    name: internal
+    driver: bridge
+    internal: true
